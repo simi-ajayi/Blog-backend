@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: blog-backend
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        fromService:
+          type: web
+          name: blog-backend
+          property: port
+      - key: DB_URI
+        sync: false
+      - key: ACCESS_TOKEN
+        sync: false
+      - key: CLOUD_NAME
+        sync: false
+      - key: CLOUD_API_KEY
+        sync: false
+      - key: CLOUD_SECRET_KEY
+        sync: false
+
