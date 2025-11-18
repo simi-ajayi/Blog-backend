@@ -26,6 +26,31 @@ app.use(
 );
 app.use("/api/v1", userRoute, postRoute);
 
+app.get("/", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "Blog API is running successfully",
+    endpoints: {
+      test: "/test",
+      api: "/api/v1",
+      user: {
+        signup: "POST /api/v1/signup",
+        login: "POST /api/v1/login"
+      },
+      posts: {
+        create: "POST /api/v1/create-post",
+        getAll: "GET /api/v1/get-all-post",
+        getOne: "GET /api/v1/get-post/:id",
+        getMyPosts: "GET /api/v1/get-my-post",
+        edit: "PUT /api/v1/edit-my-post/:id",
+        delete: "DELETE /api/v1/delete-my-post/:id",
+        comment: "PUT /api/v1/comment-post",
+        like: "PUT /api/v1/like-post"
+      }
+    }
+  });
+});
+
 app.get("/test", (req, res, next) => {
   res.status(200).send("Welcome to mymind");
 });
