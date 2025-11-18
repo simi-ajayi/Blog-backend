@@ -21,7 +21,10 @@ app.use(express.json({ limit: "50mb" }));
 app.use(
   cors({
     origin: [
+      "https://waterpoints.com.ng",
       "http://waterpoints.com.ng",
+      "https://www.waterpoints.com.ng",
+         "http://www.waterpoints.com.ng",
       "https://rolling-hills-two.vercel.app",
       "http://localhost:3000"
     ],
