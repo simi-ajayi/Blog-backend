@@ -15,11 +15,12 @@ const postRoute = express.Router();
 
 postRoute.post("/create-post", Authorized, createPost);
 postRoute.get("/get-all-post", getAllPost);
+postRoute.get("/get-trending-post", getTrendingPost);
 postRoute.get("/get-post/:id", getPost);
 postRoute.get("/get-my-post", Authorized, getMyPost);
 postRoute.delete("/delete-my-post/:id", Authorized, deleteMyPost);
 postRoute.put("/comment-post", Authorized, addCommentToPost);
 postRoute.put("/edit-my-post/:id", Authorized, editMyPost);
 postRoute.put("/like-post", Authorized, likePost); 
-postRoute.get("/get-trending-post", getTrendingPost);
+
 module.exports = postRoute;
