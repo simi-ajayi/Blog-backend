@@ -8,6 +8,7 @@ const {
   addCommentToPost,
   editMyPost,
   likePost,
+  getTrendingPost,
 } = require("../controllers/post.controller");
 const Authorized = require("../middlewares/auth");
 const postRoute = express.Router();
@@ -19,6 +20,6 @@ postRoute.get("/get-my-post", Authorized, getMyPost);
 postRoute.delete("/delete-my-post/:id", Authorized, deleteMyPost);
 postRoute.put("/comment-post", Authorized, addCommentToPost);
 postRoute.put("/edit-my-post/:id", Authorized, editMyPost);
-postRoute.put("/like-post", Authorized, likePost);
-
+postRoute.put("/like-post", Authorized, likePost); 
+postRoute.get("/get-trending-post", getTrendingPost);
 module.exports = postRoute;

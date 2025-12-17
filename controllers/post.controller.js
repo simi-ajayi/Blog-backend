@@ -218,6 +218,60 @@ const likePost = async (req, res, next) => {
   }
 };
 
+const getTrendingPost = async (req, res, next) => {
+  try {
+    const limit = 5; // Number of trending posts to return
+    
+    // Get posts from the last 30 days to consider for trending
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+    
+    const posts = await Post.find({
+      createdAt: { $gte: thirtyDaysAgo }
+    })
+    .populate('author', 'name photo')
+    .lean();
+    
+    // Calculate trending score for each post
+    const postsWithScore = posts.map(post => {
+      const likesCount = post.likes?.length || 0;
+      const commentsCount = post.comments?.length || 0;
+      
+      // Calculate days since creation
+      const daysSinceCreation = Math.max(
+        1, 
+        (Date.now() - new Date(post.createdAt).getTime()) / (1000 * 60 * 60 * 24)
+      );
+      
+      // Trending score formula:
+      // (likes * 2 + comments * 3) / days^1.5
+      // This gives more weight to recent posts with high engagement
+      const trendingScore = (
+        (likesCount * 2) + (commentsCount * 3)
+      ) / Math.pow(daysSinceCreation, 1.5);
+      
+      return {
+        ...post,
+        trendingScore
+      };
+    });
+    
+    // Sort by trending score and get top posts
+    const trendingPosts = postsWithScore
+      .sort((a, b) => b.trendingScore - a.trendingScore)
+      .slice(0, limit)
+      .map(({ trendingScore, ...post }) => post); // Remove score from response
+    
+    res.status(200).json({
+      success: true,
+      posts: trendingPosts,
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 500));
+  }
+};
+
+
 module.exports = {
   createPost,
   getAllPost,
@@ -227,4 +281,5 @@ module.exports = {
   addCommentToPost,
   editMyPost,
   likePost,
+  getTrendingPost,
 };
